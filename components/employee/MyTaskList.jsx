@@ -68,6 +68,7 @@ const MyTaskList = () => {
         hours_spent: record.hours_spent,
         hourly_rate: record.hourly_rate,
         additional_charges: record.additional_charges,
+        note: record.note,
       });
       showSuccess("Updated successfully");
       fetchAssignments(taskId);
@@ -94,85 +95,102 @@ const MyTaskList = () => {
     });
   };
 
-  const employeeColumns = (taskId) => [
-    {
-      title: "Employee Name",
-      dataIndex: ["employee", "name"],
-      key: "employee_name",
-    },
-    {
-      title: "Position",
-      dataIndex: ["employee", "position"],
-      key: "employee_position",
-    },
-    {
-      title: "Hours Spent",
-      dataIndex: "hours_spent",
-      key: "hours_spent",
-      render: (value, record) =>
-        record.employee_id === currentUserId ? (
-          <InputNumber
-            min={0}
-            value={value}
-            onChange={(val) =>
-              handleInputChange(taskId, record.id, "hours_spent", val)
-            }
-          />
-        ) : (
-          value
-        ),
-    },
-    {
-      title: "Hourly Rate",
-      dataIndex: "hourly_rate",
-      key: "hourly_rate",
-      render: (value, record) =>
-        record.employee_id === currentUserId ? (
-          <InputNumber
-            min={0}
-            value={value}
-            onChange={(val) =>
-              handleInputChange(taskId, record.id, "hourly_rate", val)
-            }
-          />
-        ) : (
-          `Rp ${value?.toLocaleString("id-ID")}`
-        ),
-    },
-    {
-      title: "Additional Charges",
-      dataIndex: "additional_charges",
-      key: "additional_charges",
-      render: (value, record) =>
-        record.employee_id === currentUserId ? (
-          <InputNumber
-            min={0}
-            value={value}
-            onChange={(val) =>
-              handleInputChange(taskId, record.id, "additional_charges", val)
-            }
-          />
-        ) : (
-          `Rp ${value?.toLocaleString("id-ID")}`
-        ),
-    },
-    {
-      title: "Prorated Remuneration",
-      dataIndex: "prorated_remuneration",
-      key: "prorated_remuneration",
-      render: (value) => `Rp ${(value || 0).toLocaleString("id-ID")}`,
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) =>
-        record.employee_id === currentUserId ? (
-          <Button type="link" onClick={() => handleSave(taskId, record)}>
-            Save
-          </Button>
-        ) : null,
-    },
-  ];
+const employeeColumns = (taskId) => [
+  {
+    title: "Employee Name",
+    dataIndex: ["employee", "name"],
+    key: "employee_name",
+  },
+  {
+    title: "Position",
+    dataIndex: ["employee", "position"],
+    key: "employee_position",
+  },
+  {
+    title: "Hours Spent",
+    dataIndex: "hours_spent",
+    key: "hours_spent",
+    render: (value, record) =>
+      record.employee_id === currentUserId ? (
+        <InputNumber
+          min={0}
+          value={value}
+          onChange={(val) =>
+            handleInputChange(taskId, record.id, "hours_spent", val)
+          }
+        />
+      ) : (
+        value
+      ),
+  },
+  {
+    title: "Hourly Rate",
+    dataIndex: "hourly_rate",
+    key: "hourly_rate",
+    render: (value, record) =>
+      record.employee_id === currentUserId ? (
+        <InputNumber
+          min={0}
+          value={value}
+          onChange={(val) =>
+            handleInputChange(taskId, record.id, "hourly_rate", val)
+          }
+        />
+      ) : (
+        `Rp ${value?.toLocaleString("id-ID")}`
+      ),
+  },
+  {
+    title: "Additional Charges",
+    dataIndex: "additional_charges",
+    key: "additional_charges",
+    render: (value, record) =>
+      record.employee_id === currentUserId ? (
+        <InputNumber
+          min={0}
+          value={value}
+          onChange={(val) =>
+            handleInputChange(taskId, record.id, "additional_charges", val)
+          }
+        />
+      ) : (
+        `Rp ${value?.toLocaleString("id-ID")}`
+      ),
+  },
+  {
+    title: "Prorated Remuneration",
+    dataIndex: "prorated_remuneration",
+    key: "prorated_remuneration",
+    render: (value) => `Rp ${(value || 0).toLocaleString("id-ID")}`,
+  },
+  {
+    title: "Note",
+    dataIndex: "note",
+    key: "note",
+    render: (value, record) =>
+      record.employee_id === currentUserId ? (
+        <Input
+          value={value}
+          onChange={(e) =>
+            handleInputChange(taskId, record.id, "note", e.target.value)
+          }
+        />
+      ) : (
+        value || "-"
+      ),
+  },
+
+  {
+    title: "Action",
+    key: "action",
+    render: (_, record) =>
+      record.employee_id === currentUserId ? (
+        <Button type="link" onClick={() => handleSave(taskId, record)}>
+          Save
+        </Button>
+      ) : null,
+  },
+];
 
   const filteredTasks = tasks.filter(
     (task) =>
